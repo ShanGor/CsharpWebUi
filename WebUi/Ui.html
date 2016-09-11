@@ -1,0 +1,115 @@
+﻿<html>
+<head>
+    <!-- Force to render the document to latest IE emulator. Because defaultly Windows make it IE7. -->
+    <!-- When you include other pages in iframe, it can still keep this latest feature too -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Samuel Chan is awesome!</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue-validator.min.js"></script>
+
+    <script>
+        function htmlAction(param1) {
+            alert(param1);
+        }
+    </script>
+</head>
+<body onload="window.external.htmlReady();">
+    <div align="center">
+        <button onclick="window.external.csharpMsgBox('javascript访问C#代码');">Javascript invoke C#</button>
+        <button onclick="window.external.csharpCallBack('C# call HTML');">C# invoke Javascript</button>
+        <div align="center" class="container">
+            <table id="app" class="table table-striped">
+                <ul>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input class="form-control" size="25" placeholder="Add some todos <Enter>" v-model="newItem" v-on:keyup.enter="addTodo">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Login</button>
+                            </td>
+                        </tr>
+                        <tr v-for="item in items">
+                            <td>
+                    <li><span id="todoList">{{key(item)}} - {{value(item)}}</span></li>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" v-on:click="removeTodo($index)">&times;</button>
+                    </td>
+                    </tr>
+                </ul>
+                </tbody>
+            </table>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Login</h4>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var myVue = new Vue({
+                el: '#app',
+                data: {
+                    newItem: '',
+                    items: [{ "Loading": "Wait.." }]
+                },
+                methods: {
+                    addTodo: function () {
+                        var text = this.newItem.trim()
+                        if (text) {
+                            this.items.push({ text: text })
+                            this.newItem = ''
+                        }
+                    },
+                    removeTodo: function (i) {
+                        this.items.splice(i, 1)
+                    },
+
+                    //For single key jason object
+                    key: function (item) {
+                        for (key in item) {
+                            return key;
+                        };
+                    },
+                    value: function (item) {
+                        for (key in item) {
+                            return item[key];
+                        };
+                    }
+                }
+            });
+
+        </script>
+        <script>
+            function getAbsolutePath() {
+                var loc = window.location;
+                var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+                return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+            }
+
+            // Due to security issue, ajax can not access local resource, now we have an C# function to retrieve it and return the string.
+            var jsonStr = window.external.ajaxLocalFileRequest(getAbsolutePath() + "test.json");
+            var json = JSON.parse(jsonStr);
+            myVue.items = json.list;
+        </script>
+    </div>
+</body>
+</html>
