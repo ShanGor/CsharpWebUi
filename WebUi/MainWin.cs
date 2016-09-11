@@ -69,32 +69,6 @@ namespace WebUi
             this.Text = this.webBrowser.Document.Title;
         }
 
-        //提供给JavaScript调用的方法  
-        public void csharpMsgBox(string message)
-        {
-            MessageBox.Show(message);
-        }
-
-        public void htmlReady()
-        {
-            //TODO, the Ui.html can call it.
-        }
-
-        //提供给JavaScript调用的方法  
-        public void csharpCallBack(string message)
-        {
-            callHtml("htmlAction", "Greeting from C#! " + message);
-        }
-
-
-        private Object callHtml(String method, String param)
-        {
-            //调用JavaScript的messageBox方法，并传入参数  
-            object[] objects = new object[1];
-            objects[0] = param;
-            return this.webBrowser.Document.InvokeScript(method, objects);
-        }
-
         public static string Detect3264()
         {
             ConnectionOptions oConn = new ConnectionOptions();
@@ -111,12 +85,5 @@ namespace WebUi
 
             return addressWidth;
         }
-
-        //Given the resource name from front end like file:///xxxx, now get absolute path
-        public string ajaxLocalFileRequest(string resource) {
-            string filePathEscaped = new Uri(resource).AbsolutePath;
-            string filePath = callHtml("unescape", filePathEscaped).ToString();
-            return File.ReadAllText(filePath);
-        } 
     }
 }

@@ -21,6 +21,14 @@
     <div align="center">
         <button onclick="window.external.csharpMsgBox('javascript访问C#代码');">Javascript invoke C#</button>
         <button onclick="window.external.csharpCallBack('C# call HTML');">C# invoke Javascript</button>
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input type="file" id="inputFile" onchange="window.external.fileSelected(this.value);" />
+                <p class="help-block">Click the button and select a file.</p>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
         <div align="center" class="container">
             <table id="app" class="table table-striped">
                 <ul>
